@@ -16,11 +16,15 @@ from mcp.server.mcpserver import MCPServer
 from fuentes.bcrp import ErrorFuente
 from fuentes.bcrp import serie as _serie_bcrp
 from fuentes.bcrp import tipo_cambio as _tipo_cambio
+from fuentes.oece import ErrorFuente as ErrorOece
+from fuentes.oece import buscar as _buscar_contrataciones
+from fuentes.oece import detalle as _detalle_contratacion
+from fuentes.oece import ultimas as _ultimas_contrataciones
 
 RAIZ = Path(__file__).resolve().parent
 ENV = RAIZ / ".env"
 
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 
 
 def cargar_env(ruta: Path = ENV) -> dict:
@@ -56,7 +60,7 @@ def estado() -> dict:
         "servicio": "datos-pe",
         "version": VERSION,
         "estado": "ok",
-        "fuentes": ["BCRP"],
+        "fuentes": ["BCRP", "OECE"],
     }
 
 
@@ -86,6 +90,49 @@ async def serie_bcrp(codigo: str, desde: str = "", hasta: str = "") -> dict:
     try:
         return await _serie_bcrp(codigo, desde, hasta)
     except ErrorFuente as error:
+        raise ValueError(str(error)) from error
+
+
+@SERVIDOR.tool()
+async def contrataciones_ultimas(pagina: int = 1) -> dict:
+    """Devuelve los últimos 20 procesos de contratación publicados.
+
+    Args:
+        pagina: Número de página, desde 1.
+    """
+    try:
+        return await _ultimas_contrataciones(pagina)
+    except ErrorOece as error:
+        raise ValueError(str(error)) from error
+
+
+@SERVIDOR.tool()
+async def contratacion_detalle(ocid: str) -> dict:
+    """Devuelve el detalle de un proceso por su OCID.
+
+    Args:
+        ocid: Identificador OCDS, por ejemplo `ocds-dgv273-seacev3-999999`.
+    """
+    try:
+        return await _detalle_contratacion(ocid)
+    except ErrorOece as error:
+        raise ValueError(str(error)) from error
+
+
+@SERVIDOR.tool()
+async def contrataciones_buscar(consulta: str, paginas: int = 5) -> dict:
+    """Busca procesos por texto en las páginas indicadas.
+
+    La API de la OECE no filtra en el servidor: se revisan las páginas y se
+    filtra localmente. Cada página trae 20 registros.
+
+    Args:
+        consulta: Texto a buscar (comprador, título, descripción u OCID).
+        paginas: Cuántas páginas revisar, de 1 a 10.
+    """
+    try:
+        return await _buscar_contrataciones(consulta, paginas)
+    except ErrorOece as error:
         raise ValueError(str(error)) from error
 
 

@@ -1,7 +1,7 @@
 # AGENTS.md — Reglas del proyecto `mcp/datos-pe`
 
-Servidor **MCP** de datos públicos del Perú para agentes de IA. Fase 1: series del
-**BCRP**. Después: **OECE** (contrataciones) y al final **El Peruano** (normas).
+Servidor **MCP** de datos públicos del Perú para agentes de IA. **BCRP** y **OECE**
+(contrataciones) están operativos; **El Peruano** (normas) queda para la siguiente fase.
 
 Proyecto **independiente**: no comparte código, entorno ni configuración con
 `../navegador/`, `../auditoria/` ni `../../../Publicaciones/`.

@@ -2,8 +2,8 @@
 
 Servidor **MCP** que entrega datos públicos del Perú a agentes de IA.
 
-- **Fase 1 (actual):** series del **BCRP**.
-- **Fase 2:** contrataciones abiertas de la **OECE** (OCDS).
+- **Fase 1:** series del **BCRP**.
+- **Fase 2 (actual):** contrataciones abiertas de la **OECE** (OCDS 1.1).
 - **Fase 3:** normas de **El Peruano**.
 
 Proyecto hermano de `../navegador/` y `../auditoria/`, con su propio entorno, token,
@@ -40,6 +40,9 @@ API pública del BCRP
 | `estado` | Versión, estado y fuentes activas |
 | `tipo_cambio` | Tipo de cambio SBS venta (soles por dólar) |
 | `serie_bcrp` | Cualquier serie del BCRP por código |
+| `contrataciones_ultimas` | Últimos 20 procesos de contratación (OECE) |
+| `contratacion_detalle` | Detalle de un proceso por OCID |
+| `contrataciones_buscar` | Búsqueda local sobre las páginas consultadas |
 
 `tipo_cambio` y `serie_bcrp` aceptan `desde` y `hasta` en formato `YYYY-MM-DD`. Por
 defecto consultan los últimos 30 días. El rango máximo es de 10 años.
@@ -49,6 +52,9 @@ Serie verificada:
 | Código | Descripción |
 |---|---|
 | `PD04640PD` | Tipo de cambio – TC Sistema bancario SBS – Venta |
+
+Las contrataciones usan la API pública de la OECE: 20 registros por página, sin filtros
+en el servidor. `contrataciones_buscar` revisa hasta 10 páginas y filtra localmente.
 
 Cada respuesta incluye `fuente`, `url` y `consultado`.
 
@@ -77,6 +83,7 @@ A mano, para depurar:
 ```bash
 ./pruebas/prueba_mcp.sh                      # 401 sin token / 200 con token
 .venv/bin/python pruebas/prueba_bcrp.py      # tipo_cambio y serie_bcrp
+.venv/bin/python pruebas/prueba_oece.py      # contrataciones OECE
 ```
 
 ## Configuración (`.env`, permisos 600)
