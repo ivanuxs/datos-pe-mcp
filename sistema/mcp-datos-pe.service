@@ -1,0 +1,22 @@
+[Unit]
+Description=MCP de datos públicos del Perú (servidor + proxy con token)
+Documentation=file:///home/oficina-2/Nextcloud/Proyectos/mcp/datos-pe/LEEME.md
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=oficina-2
+Group=oficina-2
+WorkingDirectory=/home/oficina-2/Nextcloud/Proyectos/mcp/datos-pe
+Environment=HOME=/home/oficina-2
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+ExecStart=/home/oficina-2/Nextcloud/Proyectos/mcp/datos-pe/arrancar.sh
+TimeoutStopSec=30
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
