@@ -20,11 +20,14 @@ from fuentes.oece import ErrorFuente as ErrorOece
 from fuentes.oece import buscar as _buscar_contrataciones
 from fuentes.oece import detalle as _detalle_contratacion
 from fuentes.oece import ultimas as _ultimas_contrataciones
+from fuentes.elperuano import ErrorFuente as ErrorPeruano
+from fuentes.elperuano import buscar as _buscar_normas
+from fuentes.elperuano import detalle as _detalle_norma
 
 RAIZ = Path(__file__).resolve().parent
 ENV = RAIZ / ".env"
 
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 
 
 def cargar_env(ruta: Path = ENV) -> dict:
@@ -60,7 +63,7 @@ def estado() -> dict:
         "servicio": "datos-pe",
         "version": VERSION,
         "estado": "ok",
-        "fuentes": ["BCRP", "OECE"],
+        "fuentes": ["BCRP", "OECE", "El Peruano"],
     }
 
 
@@ -133,6 +136,36 @@ async def contrataciones_buscar(consulta: str, paginas: int = 5) -> dict:
     try:
         return await _buscar_contrataciones(consulta, paginas)
     except ErrorOece as error:
+        raise ValueError(str(error)) from error
+
+
+@SERVIDOR.tool()
+async def norma_buscar(consulta: str, desde: str = "", hasta: str = "",
+                       start: int = 0) -> dict:
+    """Busca normas en el Diario Oficial El Peruano.
+
+    Args:
+        consulta: Texto a buscar, entre 2 y 100 caracteres.
+        desde: Fecha inicial YYYY-MM-DD (opcional).
+        hasta: Fecha final YYYY-MM-DD (opcional).
+        start: Desplazamiento de resultados; 0 es la primera página.
+    """
+    try:
+        return await _buscar_normas(consulta, desde, hasta, start)
+    except ErrorPeruano as error:
+        raise ValueError(str(error)) from error
+
+
+@SERVIDOR.tool()
+async def norma_detalle(id_o_url: str) -> dict:
+    """Devuelve el texto de una norma por su ruta o URL.
+
+    Args:
+        id_o_url: Ruta como `NL/2565770-1` o la URL completa del dispositivo.
+    """
+    try:
+        return await _detalle_norma(id_o_url)
+    except ErrorPeruano as error:
         raise ValueError(str(error)) from error
 
 

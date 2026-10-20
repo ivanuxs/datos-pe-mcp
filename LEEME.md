@@ -3,8 +3,8 @@
 Servidor **MCP** que entrega datos públicos del Perú a agentes de IA.
 
 - **Fase 1:** series del **BCRP**.
-- **Fase 2 (actual):** contrataciones abiertas de la **OECE** (OCDS 1.1).
-- **Fase 3:** normas de **El Peruano**.
+- **Fase 2:** contrataciones abiertas de la **OECE** (OCDS 1.1).
+- **Fase 3 (actual):** normas del **Diario Oficial El Peruano**.
 
 Proyecto hermano de `../navegador/` y `../auditoria/`, con su propio entorno, token,
 registros y repositorio.
@@ -43,6 +43,8 @@ API pública del BCRP
 | `contrataciones_ultimas` | Últimos 20 procesos de contratación (OECE) |
 | `contratacion_detalle` | Detalle de un proceso por OCID |
 | `contrataciones_buscar` | Búsqueda local sobre las páginas consultadas |
+| `norma_buscar` | Busca normas en El Peruano, con fechas opcionales |
+| `norma_detalle` | Texto completo de una norma por ruta o URL |
 
 `tipo_cambio` y `serie_bcrp` aceptan `desde` y `hasta` en formato `YYYY-MM-DD`. Por
 defecto consultan los últimos 30 días. El rango máximo es de 10 años.
@@ -84,6 +86,7 @@ A mano, para depurar:
 ./pruebas/prueba_mcp.sh                      # 401 sin token / 200 con token
 .venv/bin/python pruebas/prueba_bcrp.py      # tipo_cambio y serie_bcrp
 .venv/bin/python pruebas/prueba_oece.py      # contrataciones OECE
+.venv/bin/python pruebas/prueba_elperuano.py # normas de El Peruano
 ```
 
 ## Configuración (`.env`, permisos 600)
@@ -124,7 +127,8 @@ sudo certbot --nginx -d datos-pe.hlquantlabs.trade --redirect
 - **BCRP** — API pública de series estadísticas. Se atribuye al Banco Central de Reserva
   del Perú y se enlaza la URL de la consulta.
 - **OECE** — Contrataciones Abiertas, OCDS 1.1, licencia CC BY 4.0 (fase 2).
-- **El Peruano** — normas legales, con atribución y enlace (fase 3).
+- **El Peruano** — normas legales; no hay API JSON, se parsea el HTML del buscador. Se
+  atribuye al Diario Oficial El Peruano y se enlaza cada dispositivo.
 
 No se consultan datos personales ni se revenden bases de datos.
 
