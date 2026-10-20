@@ -126,11 +126,20 @@ sudo certbot --nginx -d datos-pe.hlquantlabs.trade --redirect
 
 - **BCRP** — API pública de series estadísticas. Se atribuye al Banco Central de Reserva
   del Perú y se enlaza la URL de la consulta.
-- **OECE** — Contrataciones Abiertas, OCDS 1.1, licencia CC BY 4.0 (fase 2).
+- **OECE** — Contrataciones Abiertas, OCDS 1.1, licencia CC BY 4.0.
 - **El Peruano** — normas legales; no hay API JSON, se parsea el HTML del buscador. Se
   atribuye al Diario Oficial El Peruano y se enlaza cada dispositivo.
 
 No se consultan datos personales ni se revenden bases de datos.
+
+## Publicación
+
+- `LISTADO.md` reúne los metadatos para Glama, MCP.so, MCP Market y MCPize: nombre,
+  descripciones en español e inglés, categoría, etiquetas, herramientas, licencias de
+  cada fuente y límites.
+- `logo.png` (512×512) y `logo.svg` son el icono del listado.
+- El `.env` queda fuera del repositorio por `.gitignore`; el repositorio no lleva
+  claves ni datos personales.
 
 ## Avisos
 

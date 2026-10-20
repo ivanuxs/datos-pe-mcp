@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 """Servidor MCP de datos públicos del Perú.
 
-Fase 1: series del BCRP (`tipo_cambio` y `serie_bcrp`). Escucha solo en
-`127.0.0.1`; la puerta pública es el proxy con token.
+Reúne series del BCRP, contrataciones del Estado (OECE) y normas del Diario
+Oficial El Peruano. Escucha solo en `127.0.0.1`; la puerta pública es el proxy
+con token.
 
 Uso:
     ./.venv/bin/python servidor.py
@@ -51,7 +52,10 @@ PUERTO = int(ENV_DATOS.get("MCP_INTERNO_PUERTO", "8950"))
 SERVIDOR = MCPServer(
     name="datos-pe",
     title="Datos públicos del Perú",
-    description="Series del BCRP y, más adelante, contrataciones y normas.",
+    description=(
+        "Tipo de cambio y series del BCRP, contrataciones del Estado y normas "
+        "del Diario Oficial El Peruano."
+    ),
     version=VERSION,
 )
 
